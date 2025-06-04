@@ -12,7 +12,32 @@ def getAllImages():
     # 1) traer un listado de imágenes crudas desde la API (ver transport.py)
     # 2) convertir cada img. en una card.
     # 3) añadirlas a un nuevo listado que, finalmente, se retornará con todas las card encontradas.
-    pass
+    
+    json_collection = transport.getAllImages()
+
+    cards = []
+    
+    for pokemon in json_collection:
+        types = []
+
+        for type in pokemon["types"]:
+            name = type["type"]["name"].capitalize()
+            types.append(name)
+
+        card = {
+            "image": pokemon["sprites"]["front_default"],
+            "id": pokemon["id"],
+            "name": pokemon["name"].capitalize(),
+            "types":types,
+            "height": pokemon["height"],
+            "weight": pokemon["weight"],
+            "base": pokemon["base_experience"],
+        }
+
+        cards.append(card)
+
+
+    return cards
 
 # función que filtra según el nombre del pokemon.
 def filterByCharacter(name):
