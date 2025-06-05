@@ -20,7 +20,6 @@ def getAllImages():
         if 'detail' in raw_data and raw_data['detail'] == 'Not found.':
             print(f"[transport.py]: Pokémon con id {id} no encontrado.")
             continue
-
         json_collection.append(raw_data)
 
     return json_collection
