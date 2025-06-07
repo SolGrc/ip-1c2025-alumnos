@@ -18,9 +18,13 @@ def home(request):
     favourite_list = services.getAllFavourites(request)
     for pokemon in favourite_list:
         favourite_list_name.append(pokemon.name)
-        
-
     return render(request, 'home.html', { 'images': images, 'favourite_list_name': favourite_list_name })
+
+
+def loading_home(request):
+    return render(request, 'loading_home.html')  # muestra el spinner
+        
+    
 
 # función utilizada en el buscador.
 def search(request):

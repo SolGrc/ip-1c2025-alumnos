@@ -30,7 +30,7 @@ def filterByCharacter(name):
 
     for card in getAllImages():
         # debe verificar si el name está contenido en el nombre de la card, antes de agregarlo al listado de filtered_cards.
-        if name.lower() in card["name"].lower():
+        if name.lower() in card.name.lower():
             filtered_cards.append(card)
 
     return filtered_cards
@@ -40,7 +40,7 @@ def filterByType(type_filter):
     filtered_cards = []
 
     for card in getAllImages():
-        for type in card["types"]:
+        for type in card.types:
             if type_filter in type.lower():
                 filtered_cards.append(card)
 
