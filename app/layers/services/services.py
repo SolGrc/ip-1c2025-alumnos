@@ -18,21 +18,7 @@ def getAllImages():
     cards = []
     
     for pokemon in json_collection:
-        types = []
-
-        for type in pokemon["types"]:
-            name = type["type"]["name"].capitalize()
-            types.append(name)
-
-        card = {
-            "image": pokemon["sprites"]["front_default"],
-            "id": pokemon["id"],
-            "name": pokemon["name"].capitalize(),
-            "types":types,
-            "height": pokemon["height"],
-            "weight": pokemon["weight"],
-            "base": pokemon["base_experience"],
-        }
+        card = translator.fromRequestIntoCard(pokemon)
         cards.append(card)
 
 
@@ -62,8 +48,9 @@ def filterByType(type_filter):
 
 # añadir favoritos (usado desde el template 'home.html')
 def saveFavourite(request):
-    fav = '' # transformamos un request en una Card (ver translator.py)
-    fav.user = get_user(request) # le asignamos el usuario correspondiente.
+    fav = translator.fromTemplateIntoCard(request) # transformamos un request en una Card (ver translator.py)
+
+    fav.user = request.user # le asignamos el usuario correspondiente.
 
     return repositories.save_favourite(fav) # lo guardamos en la BD.
 
@@ -74,13 +61,13 @@ def getAllFavourites(request):
     else:
         user = get_user(request)
 
-        favourite_list = [] # buscamos desde el repositories.py TODOS Los favoritos del usuario (variable 'user').
+        favourite_list = repositories.get_all_favourites(user) # buscamos desde el repositories.py TODOS Los favoritos del usuario (variable 'user').
+        
         mapped_favourites = []
 
-        for favourite in favourite_list:
-            card = '' # convertimos cada favorito en una Card, y lo almacenamos en el listado de mapped_favourites que luego se retorna.
+        for pokemon in favourite_list:
+            card = translator.fromRepositoryIntoCard(pokemon)
             mapped_favourites.append(card)
-
         return mapped_favourites
 
 def deleteFavourite(request):
