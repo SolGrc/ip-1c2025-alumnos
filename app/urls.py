@@ -5,6 +5,7 @@ from . import views
 urlpatterns = [
     path('', views.index_page, name='index-page'),
     path('login/', views.index_page, name='login'),
+    path('loading_home/', views.loading_home, name='loading_home'),  # muestra el spinner
     path('home/', views.home, name='home'),
     
     path('buscar/', views.search, name='buscar'),

@@ -12,10 +12,19 @@ def index_page(request):
 def home(request):
     images = []
     favourite_list = []
+    favourite_list_name = []
 
     images = services.getAllImages()
+    favourite_list = services.getAllFavourites(request)
+    for pokemon in favourite_list:
+        favourite_list_name.append(pokemon.name)
+    return render(request, 'home.html', { 'images': images, 'favourite_list_name': favourite_list_name })
 
-    return render(request, 'home.html', { 'images': images, 'favourite_list': favourite_list })
+
+def loading_home(request):
+    return render(request, 'loading_home.html')  # muestra el spinner
+        
+    
 
 # función utilizada en el buscador.
 def search(request):
@@ -45,15 +54,23 @@ def filter_by_type(request):
 # Estas funciones se usan cuando el usuario está logueado en la aplicación.
 @login_required
 def getAllFavouritesByUser(request):
-    pass
+    favourite_list = []    
+    images = []
+    favourite_list = services.getAllFavourites(request)
+
+
+    return render(request, 'favourites.html', { 'images': images, 'favourite_list': favourite_list })
+     
 
 @login_required
 def saveFavourite(request):
-    pass
+    services.saveFavourite(request)
+    return redirect('favoritos')
 
 @login_required
 def deleteFavourite(request):
-    pass
+    services.deleteFavourite(request)
+    return redirect('favoritos')
 
 @login_required
 def exit(request):
