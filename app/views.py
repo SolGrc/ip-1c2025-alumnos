@@ -1,9 +1,14 @@
 # capa de vista/presentación
 
 from django.shortcuts import redirect, render
+from django.contrib import messages
+from django.conf import settings
+from django.core.mail import send_mail
 from .layers.services import services
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
+from django.contrib.auth.models import User
+from .forms import SubscribeForm
 
 def index_page(request):
     return render(request, 'index.html')
@@ -24,8 +29,46 @@ def home(request):
 def loading_home(request):
     return render(request, 'loading_home.html')  # muestra el spinner
         
-    
+# esta funcion envía un mail al usuario al registrarse
 
+def subscribe(request):
+    form = SubscribeForm()
+    if request.method == 'POST':
+        form = SubscribeForm(request.POST)
+        if form.is_valid():
+            
+            usuario = form.cleaned_data
+            username = usuario['username']
+            email = usuario['email']
+            password = usuario['password']
+            name = usuario['name']
+            surname = usuario['surname']
+                               
+            if User.objects.filter(username = usuario['username']).exists():
+                messages.error(request, "Ese nombre de usuario ya esta en uso.")
+            
+            if User.objects.filter(email = usuario['email']).exists():
+                messages.error(request, "Esa dirección de correo electrónico ya está asociada a otra cuenta.")
+                return render(request, 'registration/register.html', {'form': form})
+            
+                
+            else:
+                User.objects.create_user(
+                    username = username,
+                    email = email,
+                    password = password,
+                    first_name = name,
+                    last_name = surname,
+                )                
+
+            subject = 'Registro exitoso'
+            message = f'¡Gracias por registrarte {username}!\nEstas son tus credenciales de inicio de sesión:\nEmail:{email}\nContraseña:{password}'
+            send_mail(subject, message, settings.EMAIL_HOST_USER, [email], fail_silently=False)
+            messages.success(request, 'Success!')
+            return redirect('loading_home')
+    return render(request, 'registration/register.html', {'form': form})
+
+    
 # función utilizada en el buscador.
 def search(request):
     name = request.POST.get('query', '')
