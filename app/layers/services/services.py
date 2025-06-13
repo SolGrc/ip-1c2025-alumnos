@@ -5,6 +5,8 @@ from ...config import config
 from ..persistence import repositories
 from ..utilities import translator
 from django.contrib.auth import get_user
+from django.contrib.auth.models import User
+from django.contrib import messages
 
 # función que devuelve un listado de cards. Cada card representa una imagen de la API de Pokemon
 def getAllImages():
@@ -80,3 +82,34 @@ def get_type_icon_url_by_name(type_name):
     if not type_id:
         return None
     return transport.get_type_icon_url_by_id(type_id)
+
+#verifica nombre de usuario y email y se crea un nuevo usuario en la base de datos 
+def register_user(usuario):
+    username = usuario['username']
+    email = usuario['email']
+    password = usuario['password']
+    name = usuario['name']
+    surname = usuario['surname']
+
+    errores = []
+                               
+    if User.objects.filter(username = usuario['username']).exists():
+        errores.append("Ese nombre de usuario ya esta en uso.")
+            
+    if User.objects.filter(email = usuario['email']).exists():
+        errores.append("Esa dirección de correo electrónico ya está asociada a otra cuenta.")
+
+    if errores:
+        return errores
+    
+
+    User.objects.create_user(
+        username = username,
+        email = email,
+        password = password,
+        first_name = name,
+        last_name = surname,
+    )     
+
+    return []
+            
