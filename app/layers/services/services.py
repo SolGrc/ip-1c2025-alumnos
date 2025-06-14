@@ -93,16 +93,15 @@ def register_user(usuario):
 
     errores = []
                                
-    if User.objects.filter(username = usuario['username']).exists():
-        errores.append("Ese nombre de usuario ya esta en uso.")
+    if User.objects.filter(username = username).exists():
+        errores.append("Ese nombre de usuario ya está en uso.")
             
-    if User.objects.filter(email = usuario['email']).exists():
+    if User.objects.filter(email = email).exists():
         errores.append("Esa dirección de correo electrónico ya está asociada a otra cuenta.")
 
     if errores:
         return errores
     
-
     User.objects.create_user(
         username = username,
         email = email,
@@ -111,5 +110,5 @@ def register_user(usuario):
         last_name = surname,
     )     
 
-    return []
+    return errores
             
