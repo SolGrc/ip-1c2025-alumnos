@@ -1,9 +1,15 @@
 # capa de vista/presentación
 
 from django.shortcuts import redirect, render
+from django.contrib import messages
+from django.conf import settings
+from django.core.mail import send_mail
 from .layers.services import services
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
+from django.contrib.auth.models import User
+from .forms import SubscribeForm
+from app.layers.services.services import register_user
 
 def index_page(request):
     return render(request, 'index.html')
@@ -19,13 +25,31 @@ def home(request):
     for pokemon in favourite_list:
         favourite_list_name.append(pokemon.name)
     return render(request, 'home.html', { 'images': images, 'favourite_list_name': favourite_list_name })
+       
+# esta funcion envía un mail al usuario al registrarse
 
+def subscribe(request):
+    form = SubscribeForm()
+    if request.method == 'POST':
+        form = SubscribeForm(request.POST)
+        if form.is_valid():
+            usuario = form.cleaned_data
+            errores = register_user(form.cleaned_data)
 
-def loading_home(request):
-    return render(request, 'loading_home.html')  # muestra el spinner
-        
+            if errores:
+                for error in errores:
+                    messages.error(request,error)
+            else:
+                username = usuario['username']
+                email = usuario['email']
+                password = usuario['password']
+                subject = 'Registro exitoso'
+                message = f'¡Gracias por registrarte {username}!\nEstas son tus credenciales de inicio de sesión:\nUsuario:{username}\nContraseña:{password}'
+                send_mail(subject, message, settings.EMAIL_HOST_USER, [email], fail_silently=False)
+                return redirect('loading_home')            
+    return render(request, 'registration/register.html', {'form': form})
+
     
-
 # función utilizada en el buscador.
 def search(request):
     name = request.POST.get('query', '')
