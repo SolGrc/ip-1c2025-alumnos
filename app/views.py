@@ -45,8 +45,7 @@ def subscribe(request):
                 password = usuario['password']
                 subject = 'Registro exitoso'
                 message = f'¡Gracias por registrarte {username}!\nEstas son tus credenciales de inicio de sesión:\nUsuario:{username}\nContraseña:{password}'
-                send_mail(subject, message, settings.EMAIL_HOST_USER, [email], fail_silently=False)
-                return redirect('loading_home')            
+                send_mail(subject, message, settings.EMAIL_HOST_USER, [email], fail_silently=False)      
     return render(request, 'registration/register.html', {'form': form})
 
     
