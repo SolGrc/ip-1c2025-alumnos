@@ -1,7 +1,6 @@
+<body>
 {% extends 'header.html' %} {% block content %}
-
-
-<div class="register-form" style="text-align: center; display: flex;flex-direction: column; justify-content: center; align-items: center; height: 100%;">
+<div class="register-form" style="text-align: center;">
     <div style="display: flex; flex-direction: column; align-items: center; width: 400px; margin-bottom: 20px;">
         {% if messages %}
             {% for message in messages %}
@@ -24,9 +23,8 @@
         {% endfor %}
 
 
-        <input type="submit" value="Submit">
+        <button type="submit" class="btn btn-primary btn-block">Registrarse</button>
     </form>
-
 </div>
-
-{% endblock %}
+{% endblock %}    
+</body>
