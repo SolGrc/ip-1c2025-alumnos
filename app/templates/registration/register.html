@@ -13,11 +13,10 @@
     </div>
    
     <form action="" method="POST" style="display: inline-block;">     
-       
         {% csrf_token %}
+        <h2 class="text-center">Registrarse</h2>
         {% for field in form %}
             <div class="form-group" style="margin-bottom: 5%; max-width: 400px">
-                <label style="display: block; text-align: left; margin-bottom: 5px">{{ field.label_tag }}</label>
                 {{ field }}
             </div>
         {% endfor %}
