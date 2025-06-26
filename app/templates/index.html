@@ -1,3 +1,4 @@
+<body>
 {% extends 'header.html' %} {% block content %} {% if request.user.is_authenticated %}
 <h2 class="text-center">Bienvenido {{ user.username | upper }}!</h2>
 {% else %}
@@ -6,4 +7,5 @@
 <p class="text-center">
     Mirá las imágenes desde <a href="{% url 'home' %}">este link.</a>
 </p>
-{% endblock %}
+{% endblock %}    
+</body>

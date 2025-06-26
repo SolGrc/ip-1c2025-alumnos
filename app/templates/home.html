@@ -1,3 +1,4 @@
+<body>
 {% extends 'header.html' %} {% block content %}
 <main>
     <h1 class="text-center">Buscador de Pokemon</h1>
@@ -30,14 +31,15 @@
             <button type="submit" class="btn btn-success">PLANTA</button>
         </form>
     </div>
-
-        <div class="row row-cols-1 row-cols-md-3 g-4">
+    <div class="container">
+        <div class="row justify-content-center">
         {% if images|length == 0 %}
         <h2 class="text-center">La búsqueda no arrojó resultados...</h2>
         {% else %} {% for img in images %}
-        <div class="col">
+        <div class="col-xl-4 col-lg-6 col-md-6 col-sm-12 d-flex justify-content-center">
+
             <!-- evaluar si la imagen pertenece al tipo fuego, agua o planta -->
-            <div class="card mb-3 ms-5 
+            <div class="card mb-4  
                     {% if img.types.0 == 'Fire' %}
                         border-danger
                     {% elif img.types.0 == 'Water' %}
@@ -47,7 +49,7 @@
                     {% else %}
                         border-warning
                     {% endif %}" 
-                    style="max-width: 540px;">
+                    >
                  <div class="row g-0">
                      <div class="col-md-4">
                          <img src="{{ img.image }}" class="card-img-top"alt="imagen">
@@ -55,19 +57,14 @@
 
                     <div class="col-md-8">
                         <div class="card-body">
-                            <h3 class="card-title">{{ img.name }} #{{ img.id }} <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" alt="Master Ball"></h3>
-                            <p class="card-text">
+                            <h4 class="card-title fw-normal"><strong>{{ img.name }} #{{ img.id }}</strong><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" alt="Master Ball"></h3>
                                 <div class="alert alert-warning alert-dismissible fade show" role="alert">
                                     {% for poketype in img.types %}
-                                    <strong><em>{{poketype}}</em></strong>
-                                    {% endfor %} 
-                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                        <span class="badge type-{{ poketype|lower }}">{{ poketype }}</span>
+                                    {% endfor %}
                                 </div>
-                            </p>
-                            <p class="card-text"><small class="text-body-secondary">Altura: {{ img.height }}</small></p>
-                            <p class="card-text"><small class="text-body-secondary">Peso: {{ img.weight }}</small></p>
-                            <p class="card-text"><small class="text-body-secondary">Nivel de experiencia base: {{ img.base }}</small></p>
                         </div>
+
                         {% if request.user.is_authenticated %}
                         <div class="card-footer text-center">
                             <form method="post" action="{% url 'agregar-favorito' %}">
@@ -83,10 +80,18 @@
                         </div>
                         {% endif %}
                     </div>
+                            <div class="information">
+                                <h5 class="card-text"><small class="text-body-secondary"><strong>Altura:</strong> {{ img.height }}</small></h5>
+                                <h5 class="card-text"><small class="text-body-secondary"><strong>Peso:</strong> {{ img.weight }}</small></h5>
+                                <h5 class="card-text"><small class="text-body-secondary"><strong>Nivel de experiencia base:</strong> {{ img.base }}</small></h5>
+                            </div>                    
                 </div>
             </div>
         </div>
         {% endfor %} {% endif %}
+    </div>        
     </div>
+    
 </main>
 {% endblock %}
+</body>

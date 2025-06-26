@@ -1,7 +1,6 @@
+<body>
 {% extends 'header.html' %} {% block content %}
-
-
-<div class="register-form" style="text-align: center; display: flex;flex-direction: column; justify-content: center; align-items: center; height: 100%;">
+<div class="register-form" style="text-align: center;">
     <div style="display: flex; flex-direction: column; align-items: center; width: 400px; margin-bottom: 20px;">
         {% if messages %}
             {% for message in messages %}
@@ -14,19 +13,17 @@
     </div>
    
     <form action="" method="POST" style="display: inline-block;">     
-       
         {% csrf_token %}
+        <h2 class="text-center">Registrarse</h2>
         {% for field in form %}
             <div class="form-group" style="margin-bottom: 5%; max-width: 400px">
-                <label style="display: block; text-align: left; margin-bottom: 5px">{{ field.label_tag }}</label>
                 {{ field }}
             </div>
         {% endfor %}
 
 
-        <input type="submit" value="Submit">
+        <button type="submit" class="btn btn-primary btn-block">Registrarse</button>
     </form>
-
 </div>
-
-{% endblock %}
+{% endblock %}    
+</body>

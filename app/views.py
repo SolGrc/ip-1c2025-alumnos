@@ -27,7 +27,6 @@ def home(request):
     return render(request, 'home.html', { 'images': images, 'favourite_list_name': favourite_list_name })
        
 # esta funcion envía un mail al usuario al registrarse
-
 def subscribe(request):
     form = SubscribeForm()
     if request.method == 'POST':
