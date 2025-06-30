@@ -55,9 +55,11 @@ def search(request):
     # si el usuario ingresó algo en el buscador, se deben filtrar las imágenes por dicho ingreso.
     if (name != ''):
         images = services.filterByCharacter(name)
-        favourite_list = []
-
-        return render(request, 'home.html', { 'images': images, 'favourite_list': favourite_list })
+        favourite_list = services.getAllFavourites(request)
+        favourite_list_name = []
+        for pokemon in favourite_list:
+            favourite_list_name.append(pokemon.name)
+        return render(request, 'home.html', { 'images': images, 'favourite_list_name': favourite_list_name })
     else:
         return redirect('home')
 
@@ -67,16 +69,17 @@ def filter_by_type(request):
 
     if type != '':
         images = services.filterByType(type) # debe traer un listado filtrado de imágenes, segun si es o contiene ese tipo.
-        favourite_list = []
-
-        return render(request, 'home.html', { 'images': images, 'favourite_list': favourite_list })
+        favourite_list = services.getAllFavourites(request)
+        favourite_list_name = []
+        for pokemon in favourite_list:
+            favourite_list_name.append(pokemon.name)
+        return render(request, 'home.html', { 'images': images, 'favourite_list_name': favourite_list_name})
     else:
         return redirect('home')
 
 # Estas funciones se usan cuando el usuario está logueado en la aplicación.
 @login_required
 def getAllFavouritesByUser(request):
-    favourite_list = []
     favourite_list = services.getAllFavourites(request)
 
 
